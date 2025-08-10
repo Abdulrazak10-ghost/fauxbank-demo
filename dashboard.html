@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - FauxBank</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.jpeg" width="125px" /></a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Products</a></li>
+                    <li><a href="">About</a></li>
+                    <li><a href="">Contact</a></li>
+                    <li><a href="account.html">Account</a></li>
+                </ul>
+            </nav>
+            <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" />
+        </div>
+    </div>
+    <div class="container2">
+        <h1>Welcome to FauxBank</h1>
+
+        <div id="user-info">
+            <p><strong>Name:</strong> <span id="user-name"></span></p>
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Balance:</strong>
+                $<span id="user-balance">0</span>
+                <i id="toggle-balance" class="fas fa-eye-slash" style="cursor: pointer; margin-left: 10px;"></i>
+            </p>
+
+            <button id="logout-btn">Logout</button>
+            
+        </div>
+
+        <h2>Send Money</h2>
+        <form id="send-money-form">
+            <input type="email" id="recipient-email" placeholder="Recipient Email" required />
+            <input type="number" id="amount" placeholder="Amount" required min="1" />
+            <button type="submit" class="submit">Send</button>
+        </form>
+        <p id="send-msg"></p>
+
+        <h2>Transaction History</h2>
+        <ul id="transaction-list"></ul>
+        <h2>Quick Actions</h2>
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Pay Bills</h3>
+                <p>Electricity, water, internet & more</p>
+                <button>Pay Now</button>
+            </div>
+            <div class="feature-card">
+                <i class="fab fa-bitcoin"></i>
+                <h3>Buy Crypto</h3>
+                <p>Invest in BTC, ETH, and more</p>
+                <button><a href="https://www.binance.com/en">Trade</a></button>
+            </div>
+            <div class="feature-card">
+                <i class="fab fa-paypal"></i>
+                <h3>Send to PayPal</h3>
+                <p>Transfer funds to your PayPal account</p>
+                <button><a href="https://www.paypal.com/">Send</a></button>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h3>Request Money</h3>
+                <p>Ask friends to send you cash</p>
+                <button>Request</button>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Analytics</h3>
+                <p>Track your spending trends</p>
+                <button>View</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="small-container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Download Our App</h3>
+                    <p>Available in iOS and Google Playstore</p>
+                    <div class="app-logo">
+                        <img src="images/play-store.png" alt="" />
+                        <img src="images/app-store.png" alt="" />
+                    </div>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Follow us</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>X Twitter</li>
+                        <li>Instagram</li>
+
+                    </ul>
+                </div>
+            </div>
+            <hr />
+            <p class="Copyright">Copyright 2025 FauxBank</p>
+        </div>
+    </div>
+
+    <!-- Menu Toggle -->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle() {
+            MenuItems.style.maxHeight = MenuItems.style.maxHeight === "0px" ? "200px" : "0px";
+        }
+    </script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        updateDoc,
+        arrayUnion,
+        query,
+        collection,
+        where,
+        getDocs
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBMRQGmJJT6Op7szGtp8j9L7kag5lb6ObY",
+        authDomain: "fauxbank-ebda3.firebaseapp.com",
+        projectId: "fauxbank-ebda3",
+        storageBucket: "fauxbank-ebda3.appspot.com",
+        messagingSenderId: "665572637941",
+        appId: "1:665572637941:web:07a70aa36f38d1182859bc",
+        measurementId: "G-ZM0EWJ0KFZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser;
+    let currentUserBalance;
+    let balanceVisible = true;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "account.html";
+            return;
+        }
+
+        currentUser = user;
+
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const data = userDoc.data();
+
+        currentUserBalance = data.balance;
+        document.getElementById("user-name").innerText = data.name || "User";
+        document.getElementById("user-email").innerText = user.email;
+        document.getElementById("user-balance").innerText = currentUserBalance;
+        renderTransactions(data.transactions);
+
+        // 👁️ Balance toggle logic
+        document.getElementById("toggle-balance").addEventListener("click", () => {
+            const balanceSpan = document.getElementById("user-balance");
+            const icon = document.getElementById("toggle-balance");
+
+            if (balanceVisible) {
+                balanceSpan.innerText = "••••";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            } else {
+                balanceSpan.innerText = currentUserBalance;
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            }
+
+            balanceVisible = !balanceVisible;
+        });
+    });
+
+    function renderTransactions(transactions) {
+        const list = document.getElementById("transaction-list");
+        list.innerHTML = "";
+        transactions.reverse().forEach(tx => {
+            const li = document.createElement("li");
+            li.innerText = `${tx.type === "sent" ? "Sent" : "Received"} $${tx.amount} ${tx.type === "sent" ? "to" : "from"} ${tx.email}`;
+            list.appendChild(li);
+        });
+    }
+
+    document.getElementById("send-money-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const recipientEmail = document.getElementById("recipient-email").value;
+        const amount = parseFloat(document.getElementById("amount").value);
+
+        const senderDocRef = doc(db, "users", currentUser.uid);
+        const senderDoc = await getDoc(senderDocRef);
+        const senderData = senderDoc.data();
+
+        if (amount > senderData.balance) {
+            document.getElementById("send-msg").innerText = "Insufficient funds.";
+            return;
+        }
+
+        const q = query(collection(db, "users"), where("email", "==", recipientEmail));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            document.getElementById("send-msg").innerText = "Recipient not found.";
+            return;
+        }
+
+        const recipientDocRef = querySnapshot.docs[0].ref;
+        const recipientData = querySnapshot.docs[0].data();
+
+        await updateDoc(senderDocRef, {
+            balance: senderData.balance - amount,
+            transactions: arrayUnion({ type: "sent", amount, email: recipientEmail })
+        });
+
+        await updateDoc(recipientDocRef, {
+            balance: recipientData.balance + amount,
+            transactions: arrayUnion({ type: "received", amount, email: currentUser.email })
+        });
+
+        document.getElementById("send-msg").innerText = "Transfer successful!";
+        currentUserBalance = senderData.balance - amount;
+        document.getElementById("user-balance").innerText = balanceVisible ? currentUserBalance : "••••";
+    });
+
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "account.html";
+    });
+</script>
+
+
+</body>
+
+</html>
