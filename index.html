@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>FauxBank</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <a href="index.html"><img src="images/logo.jpeg" width="125px" /></a>
+      </div>
+      <nav>
+        <ul id="MenuItems">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="">Customer Care</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="">Contact</a></li>
+          <li><a href="account.html">Account</a></li>
+        </ul>
+      </nav>
+      <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" />
+    </div>
+  </div>
+
+    <section class="header1">
+      <div class="text-box">
+            <h1>Welcome to <span>Faux</span>Bank</h1>
+            <p>Your trusted partner in financial services.</p>
+            <a href="account.html" class="btn">Get Started</a>
+      </div>
+    </section>
+    <section class="course">
+        <h1>Our Services</h1>
+        <p>Explore a range of financial services tailored to your needs.</p>
+        <div class="rows">
+          <div class="course-col">
+            <h3>Account Management</h3>
+            <p>Manage your account settings and preferences with ease.</p>
+          </div>
+          <div class="course-col">
+            <h3>Money Transfers</h3>
+            <p>Send and receive money quickly and securely.</p>
+          </div>
+          <div class="course-col">
+            <h3>Loan Services</h3>
+            <p>Access a variety of loan options to meet your financial needs.</p>
+          </div>
+        </div>
+    </section>
+    <section class="location">
+      <h1>Our Branches World wide</h1>
+      <div class="rows">
+        <div class="loc-col">
+          <img src="images/london.png" alt="">
+          <div class="layer">
+            <h3>LONDON</h3>
+          </div>
+        </div>
+          <div class="loc-col">
+          <img src="images/newyork.png" alt="">
+          <div class="layer">
+            <h3>NEW YORK</h3>
+          </div>
+        </div>
+          <div class="loc-col">
+          <img src="images/washington.png" alt="">
+          <div class="layer">
+            <h3>WASHINGTON</h3>
+          </div>
+        </div>
+      
+    </section>
+
+    <section class="expertise">
+      <h1>Our Expertise</h1>
+      <div class="rows">
+        <div class="expert-col">
+          <img src="images/crypto.jpeg" alt="">
+          <h3>Withdrawal Access</h3>
+          <p>World Wide Automated Teller Machine (A.T.M) service</p>
+        </div>
+        <div class="expert-col">
+          <img src="images/atm.jpeg" alt="">
+          <h3>Crypto Accessibilty</h3>
+          <p> cryptocurrency market availability</p>
+        </div>
+        <div class="expert-col">
+          <img src="images/creditcard.jpeg" alt="">
+          <h3>Credit Card</h3>
+          <p>Credit card usage with F.E.D regulation</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <h1>What Our Clients say? </h1>
+      <div class="rows">
+        <div class="testimonial-col">
+          <img src="images/user1.jpg" alt="">
+          <div>
+            <p>
+              Fast, Secure and swift transfer method.
+            </p>
+            <h3>Christine</h3>
+          </div>
+        </div>
+        <div class="testimonial-col">
+          <img src="images/user2.jpg" alt="">
+          <div>
+            <p>
+              Crypto has always been where the money is at, and with
+              the easy Accessibilty to trade and withdraw my money directly to my bank is a Yes for me.
+            </p>
+            <h3>Adam</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+ 
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="small-container">
+      <div class="row">
+        <div class="footer-col-1">
+          <h3>Download Our App</h3>
+          <p>Available in iOS and Google Playstore</p>
+          <div class="app-logo">
+            <img src="images/play-store.png" alt="" />
+            <img src="images/app-store.png" alt="" />
+          </div>
+        </div>
+        <div class="footer-col-4">
+          <h3>Follow us</h3>
+          <ul>
+            <li>Facebook</li>
+            <li>X Twitter</li>
+            <li>Instagram</li>
+
+          </ul>
+        </div>
+      </div>
+      <hr />
+      <p class="Copyright">Copyright 2025 FauxBank</p>
+    </div>
+  </div>
+
+  <!-- Menu Toggle -->
+  <script>
+    var MenuItems = document.getElementById("MenuItems");
+    MenuItems.style.maxHeight = "0px";
+
+    function menutoggle() {
+      MenuItems.style.maxHeight = MenuItems.style.maxHeight === "0px" ? "200px" : "0px";
+    }
+  </script>
+
+
+
+</body>
+
+</html>
